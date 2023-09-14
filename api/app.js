@@ -15,7 +15,7 @@ app.use(express.static(__dirname));
 // require("./api_latest_price.js")(app);
 // require("./api_portfolio.js")(app);
 // require("./api_account.js")(app);
-require("./server/test.js")(app);
+require("./test.js")(app);
 // ...
 
 // Start the Express server

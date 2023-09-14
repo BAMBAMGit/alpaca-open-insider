@@ -1,5 +1,5 @@
 const Alpaca = require("@alpacahq/alpaca-trade-api");
-const { apiKey, apiSecret, headers } = require('../alpaca_cred');
+const { apiKey, apiSecret, headers } = require('./alpaca_cred');
 
 const alpaca = new Alpaca({
     keyId: apiKey,
