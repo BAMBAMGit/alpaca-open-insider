@@ -1,0 +1,10 @@
+python -m venv FOLDER_PATH\venv
+venv/scripts/activate
+python -m http.server
+http://localhost:8000
+
+initialize project this command generates a package.json file with default values
+npm init -y
+
+install alpaca SDK
+npm install --save @alpacahq/alpaca-trade-api
