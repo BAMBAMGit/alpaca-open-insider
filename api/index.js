@@ -18,7 +18,11 @@ const app = express();
 require("./test.js")(app);
 // ...
 
-export default app
+app.get("/", (req, res) => {
+  res.send("Express on Vercel");
+});
+
+module.exports = app
 
 // Start the Express server
 const PORT = process.env.PORT || 3000;

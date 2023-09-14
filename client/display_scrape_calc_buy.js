@@ -2,7 +2,7 @@
 
 
 setTimeout(() => {
-    console.log("5 seconds have passed!");
+    console.log("1 second(s) has passed!");
 
     fetch("/api/scrape_calculate_buy")
     .then((response) => response.text())
@@ -16,5 +16,5 @@ setTimeout(() => {
         balanceElement.textContent = "Error fetching scrape_calculate_buy";
     });
 
-  }, 5000);
+  }, 1000);
   
