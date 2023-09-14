@@ -1,4 +1,4 @@
-9/13/23 v0.1.0
+9/13/23
 scrape open-insider via a custom url to get yesterday's insider trades
 then check alpaca account value to help decide how much to invest today
 then place buy orders on alpaca using the tickers found from the scraped url
