@@ -1,4 +1,4 @@
-const isMarketOpen = require('./alpaca_is_market_open.js');
+const isMarketOpen = require('../ignore_folder/alpaca_is_market_open.js');
 const scrape_module = require('./api_scrape.js');
 const positions_module = require('./api_portfolio.js');
 const account_module = require('./api_account.js');

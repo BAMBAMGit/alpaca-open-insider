@@ -1,7 +1,7 @@
 // node doc returns true/false if market is open
 
 const fetch = require('node-fetch');
-const { apiKey, apiSecret, headers } = require('./alpaca_cred');
+const { apiKey, apiSecret, headers } = require('../api/alpaca_cred');
 
 
 // // Replace these with your Alpaca API keys
