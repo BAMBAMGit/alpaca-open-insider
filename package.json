@@ -2,7 +2,7 @@
   "name": "alpaca-open-insider",
   "version": "0.1.0",
   "description": "",
-  "main": "server/app.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
