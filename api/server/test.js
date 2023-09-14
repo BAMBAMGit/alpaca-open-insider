@@ -1,8 +1,8 @@
 const isMarketOpen = require('./alpaca_is_market_open.js');
-const scrape_module = require('./api_scrape');
-const positions_module = require('./api_portfolio');
-const account_module = require('./api_account');
-const yesterday_price_module = require('./api_latest_price');
+const scrape_module = require('./api_scrape.js');
+const positions_module = require('./api_portfolio.js');
+const account_module = require('./api_account.js');
+const yesterday_price_module = require('./api_latest_price.js');
 const place_order = require('./alpaca_place_order.js');
 
 // check if the market is open
