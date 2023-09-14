@@ -2,9 +2,10 @@
   "name": "alpaca-open-insider",
   "version": "0.1.0",
   "description": "",
-  "main": "/api/index.js",
+  "main": "api/index.js",
   "scripts": {
-    "start": "node api/index.js"
+    "start": "node api/index.js",
+    "vercel-build": "echo hello"
   },
   "keywords": [],
   "author": "",
