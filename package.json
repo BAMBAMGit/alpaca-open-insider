@@ -2,9 +2,9 @@
   "name": "alpaca-open-insider",
   "version": "0.1.0",
   "description": "",
-  "main": "api/app.js",
+  "main": "api/index.js",
   "scripts": {
-    "start": "node api/app.js"
+    "start": "node api/index.js"
   },
   "keywords": [],
   "author": "",

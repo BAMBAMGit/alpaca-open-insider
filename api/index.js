@@ -7,16 +7,8 @@ const app = express();
 // app.use(express.json());
 // app.use(cors());
 
-// // Serve your index.html file as a static file
-// app.use(express.static(__dirname));
-
-const path = require('path'); // Import the path module
-
-// Define the path to your root directory
-const rootDirectory = path.join(__dirname, '..'); // Go up one level
-
-// Serve the index.html file from the root directory
-app.use(express.static(rootDirectory));
+// Serve your index.html file as a static file
+app.use(express.static(__dirname));
 
 // Include your Node.js scripts
 // require("./api_scrape.js")(app);
