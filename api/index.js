@@ -8,7 +8,7 @@ const app = express();
 // app.use(cors());
 
 // Serve your index.html file as a static file
-app.use(express.static(__dirname));
+// app.use(express.static(__dirname));
 
 // Include your Node.js scripts
 // require("./api_scrape.js")(app);
@@ -17,6 +17,8 @@ app.use(express.static(__dirname));
 // require("./api_account.js")(app);
 require("./test.js")(app);
 // ...
+
+export default app
 
 // Start the Express server
 const PORT = process.env.PORT || 3000;
