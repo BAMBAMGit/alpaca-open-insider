@@ -1,28 +1,23 @@
 // USE THIS APP TO RUN NODE.JS FILES. this is attached to the index.html and can call node.js files when the client website is loaded.
 
-const express = require("express");
+const path = require('path');
+const express = require('express');
 const app = express();
 
-// Middleware setup, such as body parsing and CORS configuration
-// app.use(express.json());
-// app.use(cors());
 
 // Serve your index.html file as a static file
 // app.use(express.static(__dirname));
 
-// Include your Node.js scripts
-// require("./api_scrape.js")(app);
-// require("./api_latest_price.js")(app);
-// require("./api_portfolio.js")(app);
-// require("./api_account.js")(app);
-require("./test.js")(app);
-// ...
+// Serve static files (including 'index.html') from the root directory
+app.use(express.static(path.join(__dirname, '..')));
 
-app.get("/", (req, res) => {
-  res.send("Express on Vercel");
+// Serve your 'index.html' file when someone visits the root URL ("/")
+app.get('/', (req, res) => {
+  const indexPath = path.join(__dirname, 'index.html');
+  res.sendFile(indexPath);
 });
 
-module.exports = app
+require("../test.js")(app);
 
 // Start the Express server
 const PORT = process.env.PORT || 3000;

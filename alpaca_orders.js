@@ -1,4 +1,4 @@
-
+const { apiKey, apiSecret, headers } = require('./alpaca_cred');
 
 function get_alpaca_orders() {
 

@@ -1,12 +1,7 @@
 // node doc returns true/false if market is open
 
 const fetch = require('node-fetch');
-const { apiKey, apiSecret, headers } = require('../api/alpaca_cred');
-
-
-// // Replace these with your Alpaca API keys
-// const apiKey = 'PK6I50R1Z0780WZ61OQ2';
-// const apiSecret = 'rXBaDP8qxZGzXTK8SrkEguLAn6KEFXjkzqbj9lON';
+const { apiKey, apiSecret, headers } = require('./alpaca_cred');
 
 // Alpaca API base URL
 const baseURL = 'https://paper-api.alpaca.markets'; // Use 'https://api.alpaca.markets' for the live market
@@ -27,12 +22,13 @@ async function isMarketOpen() {
     }
 
     const marketStatus = await response.json();
-
     return marketStatus.is_open
 
   } catch (error) {
     console.error('Error checking market status:', error.message);
   }
 }
+
+isMarketOpen()
 
 module.exports = isMarketOpen

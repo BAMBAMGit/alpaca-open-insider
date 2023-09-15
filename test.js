@@ -1,4 +1,4 @@
-const isMarketOpen = require('../ignore_folder/alpaca_is_market_open.js');
+const isMarketOpen = require('./alpaca_is_market_open.js');
 const scrape_module = require('./api_scrape.js');
 const positions_module = require('./api_portfolio.js');
 const account_module = require('./api_account.js');
@@ -129,13 +129,13 @@ async function get_latest_prices() {
     }
 }
 
+
 // Define an API endpoint to get_alpaca_positions()
 module.exports = function (app) {
         
   app.get("/api/scrape_calculate_buy", async (req, res) => {
       
       try {
-          console.log('hihihih')
           const ticker_quantities = await get_latest_prices();
           res.send(ticker_quantities);
 
