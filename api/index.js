@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 //   res.sendFile(indexPath);
 // });
 
-require("../test.js")(app);
+require("./test.js")(app);
 
 // Start the Express server
 const PORT = process.env.PORT || 3000;
