@@ -5,17 +5,15 @@ const express = require('express');
 const app = express();
 
 
-// Serve your index.html file as a static file
-// app.use(express.static(__dirname));
-
 // Serve static files (including 'index.html') from the root directory
 app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Serve your 'index.html' file when someone visits the root URL ("/")
-app.get('/', (req, res) => {
-  const indexPath = path.join(__dirname, 'index.html');
-  res.sendFile(indexPath);
-});
+// // Serve your 'index.html' file when someone visits the root URL ("/")
+// app.get('/', (req, res) => {
+//   const indexPath = path.join(__dirname, 'index.html');
+//   res.sendFile(indexPath);
+// });
 
 require("../test.js")(app);
 
