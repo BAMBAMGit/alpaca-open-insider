@@ -23,7 +23,6 @@ async function getHistoricalBars(ticker) {
     package_[ticker] = bar
   }
 
-  console.log(package_)
   return package_
 }
 

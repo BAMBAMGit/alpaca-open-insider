@@ -128,8 +128,6 @@ async function get_latest_prices() {
     }
 }
 
-get_latest_prices()
-
 module.exports = get_latest_prices
 
 
