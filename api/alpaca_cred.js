@@ -1,5 +1,5 @@
-const apiKey = 'PKUKLUTBAUW9LITRTVFL';
-const apiSecret = '2GZu6fqitkZqA7GIRJLocL8bQlLYwhItClua8CoQ';
+const apiKey = 'PKS47IC3EM97XWTUNGVP';
+const apiSecret = '2a7MKeXwbwVPeis4s0UhjURaPEix1NbRcIlG4gSE';
 
 // Set up the request headers with your API credentials
 const headers = new Headers({

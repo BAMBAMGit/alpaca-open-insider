@@ -131,7 +131,7 @@ async function get_latest_prices() {
     }
 }
 
-module.exports = get_latest_prices
+
 // Define an API endpoint to get_alpaca_positions()
 module.exports = function (app) {
         

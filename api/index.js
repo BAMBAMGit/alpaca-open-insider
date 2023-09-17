@@ -4,18 +4,64 @@ const path = require('path');
 const express = require('express');
 const app = express();
 
+const scrape_calc_buy = require("./test.js");
+const isMarketOpen = require('./alpaca_is_market_open.js');
 
-// Serve static files (including 'index.html') from the root directory
-app.use(express.static(path.join(__dirname, '..')));
-app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// // Serve your 'index.html' file when someone visits the root URL ("/")
-// app.get('/', (req, res) => {
-//   const indexPath = path.join(__dirname, 'index.html');
-//   res.sendFile(indexPath);
-// });
+// making an api for '/' that responds with dynamic html
+app.get('/', async (req, res) => {
+    
+    // check to see if market is open
+    try {
+      const is_market_open_response = await isMarketOpen();
+      console.log('is market open?:', is_market_open_response);
 
-require("./test.js")(app);
+      // if market open then scrape, calculate, send buy orders, and serve ticker/ticker_quantity object via API.
+      if (is_market_open_response == true) {
+        const scrape_calc_buy_response = await scrape_calc_buy();
+
+        // Render the HTML with the node.js data
+        const renderedHtml = `
+        <html>
+          <head>
+            <!-- Your HTML head content here -->
+          </head>
+          <body>
+            <h1>Your Website</h1>
+            <p>scrape_calc_buy_response: ${scrape_calc_buy_response}</p>
+          </body>
+        </html>
+        `;
+
+        res.send(renderedHtml);
+      }
+
+      // if market closed then serve response that market is closed.
+      else {
+        const scrape_calc_buy_response = 'Market closed. No orders placed.'
+
+        // Render the HTML with the response that market is closed
+        const renderedHtml = `
+        <html>
+          <head>
+            <!-- Your HTML head content here -->
+          </head>
+          <body>
+            <h1>Your Website</h1>
+            <p>${scrape_calc_buy_response}</p>
+          </body>
+        </html>
+        `;
+
+        res.send(renderedHtml);
+      }
+
+    } catch (error) {
+      console.error('Error in checking if market is open:', error.message);
+    }
+
+});
+
 
 // Start the Express server
 const PORT = process.env.PORT || 3000;
