@@ -119,7 +119,9 @@ async function get_latest_prices() {
 
         // add tickers object to firebase folder
         console.log(ticker_quantities)
-        // account_module_functions.set_values_to_firebase(ticker_quantities)
+        xx = 'hihi'
+        console.log(xx)
+        account_module_functions.set_values_to_firebase(xx)
 
         return ticker_quantities
 
