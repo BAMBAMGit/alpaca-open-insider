@@ -1,7 +1,7 @@
 const isMarketOpen = require('./alpaca_is_market_open.js');
 const scrape_module = require('./api_scrape.js');
 const positions_module = require('./api_portfolio.js');
-const account_module = require('./api_account.js');
+const account_module_functions = require('./api_account.js');
 const yesterday_price_module = require('./api_latest_price.js');
 const place_order = require('./alpaca_place_order.js');
 
@@ -44,7 +44,7 @@ async function get_positions() {
 // get account value
 async function get_account_value() {
     try {
-      const result = await account_module();
+      const result = await account_module_functions.account_info();
       return result.portfolio_value
     } catch (error) {
       console.error('Error in checking account value:', error.message);
@@ -55,7 +55,7 @@ async function get_account_value() {
 // get account value
 async function get_cash_account_value() {
     try {
-      const result = await account_module();
+      const result = await account_module_functions.account_info();
       return result.cash
     } catch (error) {
       console.error('Error in checking account value:', error.message);
@@ -112,12 +112,14 @@ async function get_latest_prices() {
           // place order
           if (cost_ < cash_value && quantity_ > 0) {
             place_order(ticker, quantity_)
-            console.log(ticker + ' Order Placed: ' + '   price = ' + price_ + '   qty = ' + quantity_ + '   cost = ' + cost_)
+            console.log(ticker + ' Order Placed: ' + '   price = ' + price_ + '   cost = ' + cost_ + '   qty = ' + quantity_)
           }
           
         }
 
+        // add tickers object to firebase folder
         console.log(ticker_quantities)
+        account_module_functions.set_values_to_firebase(ticker_quantities)
 
         return ticker_quantities
 
@@ -125,6 +127,8 @@ async function get_latest_prices() {
         console.error('Error in getting latest prices:', error.message);
     }
 }
+
+get_latest_prices()
 
 module.exports = get_latest_prices
 

@@ -8,8 +8,8 @@ const alpaca = new Alpaca({
 });
 
 const options = {
-  start: new Date(new Date().setDate(new Date().getDate() - 4)), // 1 day ago
-  end: new Date(new Date().setDate(new Date().getDate() - 3)), // Current date
+  start: new Date(new Date().setDate(new Date().getDate() - 7)), // 1 day ago
+  end: new Date(new Date().setDate(new Date().getDate() - 1)), // Current date
   timeframe: "1Day",
 };
 
@@ -23,6 +23,7 @@ async function getHistoricalBars(ticker) {
     package_[ticker] = bar
   }
 
+  console.log(package_)
   return package_
 }
 
