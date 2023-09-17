@@ -17,18 +17,25 @@ app.get('/', async (req, res) => {
       console.log('is market open?:', is_market_open_response);
 
       // if market open then scrape, calculate, send buy orders, and serve ticker/ticker_quantity object via API.
-      if (is_market_open_response) {
+      if (is_market_open_response == false) {
         const scrape_calc_buy_response = await scrape_calc_buy();
+        
+        // turn object to string
+        // Use Object.keys() to get an array of the object's keys
+        const keys = Object.keys(scrape_calc_buy_response);
+
+        // Use map() to create an array of strings in the format "key: value"
+        const keyValueStrings = keys.map(key => `${key}: ${scrape_calc_buy_response[key]}`);
+
+        // Use join() to concatenate the array elements into a single string
+        const resultString = keyValueStrings.join(', ');
+
 
         // Render the HTML with the node.js data
         const renderedHtml = `
         <html>
-          <head>
-            <!-- Your HTML head content here -->
-          </head>
           <body>
-            <h1>Your Website</h1>
-            <p>scrape_calc_buy_response: ${scrape_calc_buy_response}</p>
+            <p>scrape_calc_buy_response: ${resultString}</p>
           </body>
         </html>
         `;
@@ -38,17 +45,11 @@ app.get('/', async (req, res) => {
 
       // if market closed then serve response that market is closed.
       else {
-        const scrape_calc_buy_response = 'Market closed. No orders placed.'
-
         // Render the HTML with the response that market is closed
         const renderedHtml = `
         <html>
-          <head>
-            <!-- Your HTML head content here -->
-          </head>
           <body>
-            <h1>Your Website</h1>
-            <p>${scrape_calc_buy_response}</p>
+            <p>'Market closed. No orders placed.'</p>
           </body>
         </html>
         `;

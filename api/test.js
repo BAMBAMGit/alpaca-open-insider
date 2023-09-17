@@ -45,7 +45,6 @@ async function get_positions() {
 async function get_account_value() {
     try {
       const result = await account_module();
-      console.log('account value:', result.portfolio_value);
       return result.portfolio_value
     } catch (error) {
       console.error('Error in checking account value:', error.message);
@@ -57,7 +56,6 @@ async function get_account_value() {
 async function get_cash_account_value() {
     try {
       const result = await account_module();
-      console.log('account cash value:', result.cash);
       return result.cash
     } catch (error) {
       console.error('Error in checking account value:', error.message);
@@ -70,20 +68,19 @@ async function get_latest_prices() {
     try {
 
         const ticker_list = await get_scraped_tickers()
-        console.log(ticker_list)
 
         buy_prices = {}
 
         for (const ticker of ticker_list) {
 
             try {
-                const ticker_bars = await yesterday_price_module(ticker);
-                const ticker_close = ticker_bars[ticker]['ClosePrice']
-                buy_prices[ticker] = ticker_close
+              const ticker_bars = await yesterday_price_module(ticker);
+              const ticker_close = ticker_bars[ticker]['ClosePrice']
+              buy_prices[ticker] = ticker_close
             }
 
             catch (error) {
-                console.error('Error in checking latest close prices:', error.message);
+              console.error('Error in checking latest close prices:', error.message);
             }
 
         }
@@ -112,17 +109,15 @@ async function get_latest_prices() {
           const quantity_ = ticker_quantities[ticker]
           const cost_ = price_ * quantity_
 
-          console.log(cash_value)
-          console.log(price_)
-          console.log(quantity_)
-          console.log(cost_)
-
           // place order
           if (cost_ < cash_value && quantity_ > 0) {
             place_order(ticker, quantity_)
+            console.log(ticker + ' Order Placed: ' + '   price = ' + price_ + '   qty = ' + quantity_ + '   cost = ' + cost_)
           }
           
         }
+
+        console.log(ticker_quantities)
 
         return ticker_quantities
 
@@ -132,33 +127,36 @@ async function get_latest_prices() {
 }
 
 module.exports = get_latest_prices
-// Define an API endpoint to get_alpaca_positions()
-module.exports = function (app) {
+
+
+
+// // Define an API endpoint to get_alpaca_positions()
+// module.exports = function (app) {
         
-  app.get("/api/scrape_calculate_buy", async (req, res) => {
+//   app.get("/api/scrape_calculate_buy", async (req, res) => {
     
-    try {
+//     try {
 
-      // check to see if market is open
-      const is_market_open_response = await marketstatus();
+//       // check to see if market is open
+//       const is_market_open_response = await marketstatus();
 
-      // if market open then scrape, calculate, send buy orders, and serve ticker/ticker_quantity object via API.
-      if (is_market_open_response) {
+//       // if market open then scrape, calculate, send buy orders, and serve ticker/ticker_quantity object via API.
+//       if (is_market_open_response) {
         
-        const ticker_quantities = await get_latest_prices();
-        res.send(ticker_quantities);
+//         const ticker_quantities = await get_latest_prices();
+//         res.send(ticker_quantities);
 
-      }
+//       }
 
-      // if market closed then serve response that market is closed.
-      else {
-        res.send('Market closed. No orders placed.');
-      }
+//       // if market closed then serve response that market is closed.
+//       else {
+//         res.send('Market closed. No orders placed.');
+//       }
 
-    } catch (error) {
-      console.error("Error running scrape_calculate_buy:", error.message);
-      res.status(500).send("Internal server error");
-    }
-  });
+//     } catch (error) {
+//       console.error("Error running scrape_calculate_buy:", error.message);
+//       res.status(500).send("Internal server error");
+//     }
+//   });
 
-};
+// };
