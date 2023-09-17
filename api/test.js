@@ -117,11 +117,16 @@ async function get_latest_prices() {
           
         }
 
-        // add tickers object to firebase folder
         console.log(ticker_quantities)
-        xx = 'hihi'
-        console.log(xx)
-        account_module_functions.set_values_to_firebase(xx)
+
+        // add tickers object to firebase folder
+
+        // turn object to string
+        const keys = Object.keys(ticker_quantities);  // Use Object.keys() to get an array of the object's keys
+        const keyValueStrings = keys.map(key => `${key}: ${ticker_quantities[key]}`);  // Use map() to create an array of strings in the format "key: value"
+        const resultString = keyValueStrings.join(', ');  // Use join() to concatenate the array elements into a single string
+
+        account_module_functions.set_values_to_firebase(resultString)
 
         return ticker_quantities
 
