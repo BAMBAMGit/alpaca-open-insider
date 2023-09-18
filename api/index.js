@@ -16,8 +16,8 @@ app.get('/', async (req, res) => {
       const is_market_open_response = await isMarketOpen();
       console.log('is market open?:', is_market_open_response);
 
-      // if market open then scrape, calculate, send buy orders, and serve ticker/ticker_quantity object via API.
-      if (is_market_open_response == false) {
+      // if market open then scrape, calculate, send buy orders, and serve html with ticker/ticker_quantity via API.
+      if (is_market_open_response == true) {
         const scrape_calc_buy_response = await scrape_calc_buy();
         
         // turn object to string
