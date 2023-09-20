@@ -67,25 +67,35 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-function setValueToTodayFolder(myValues) {
-  // Get today's date in the "YYYY-MM-DD" format
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-  const dd = String(today.getDate()).padStart(2, '0');
-  const todayDateString = `${yyyy}-${mm}-${dd}`;
+async function setValueToTodayFolder(myValues) {
 
-  // Reference to the Firebase folder with today's date
-  const folderRef = ref(database, todayDateString);
+  try {
 
-  // Set the values in the folder
-  set(folderRef, myValues)
-    .then(() => {
-      console.log(`Values set in folder ${todayDateString}`);
-    })
-    .catch((error) => {
-      console.error(`Error setting values: ${error}`);
-    });
+    const myValues_for_firebase = await myValues;
+
+    // Get today's date in the "YYYY-MM-DD" format
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const dd = String(today.getDate()).padStart(2, '0');
+    const todayDateString = `${yyyy}-${mm}-${dd}`;
+
+    // Reference to the Firebase folder with today's date
+    const folderRef = ref(database, todayDateString);
+
+    // Set the values in the folder
+    set(folderRef, myValues_for_firebase)
+      .then(() => {
+        console.log(`Values set in folder ${todayDateString}`);
+      })
+      .catch((error) => {
+        console.error(`Error setting values: ${error}`);
+      });
+
+  } catch (error) {
+    throw error;
+  }
+
 }
 
 
