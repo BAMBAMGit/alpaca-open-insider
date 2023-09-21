@@ -124,10 +124,10 @@ async function get_latest_prices() {
         // const keyValueStrings = keys.map(key => `${key}: ${ticker_quantities[key]}`);  // Use map() to create an array of strings in the format "key: value"
         // const resultString = keyValueStrings.join(', ');  // Use join() to concatenate the array elements into a single string
 
-        // add tickers object to firebase folder
-        account_module_functions.set_values_to_firebase(ticker_quantities)
+        // add tickers object to firebase folder. need to await the upload otherwise the html will be sent via api prior to upload to firebase completing.
+        const ticker_quantities_uploaded = await account_module_functions.set_values_to_firebase(ticker_quantities)
 
-        return ticker_quantities
+        return ticker_quantities_uploaded
 
     } catch (error) {
         console.error('Error in getting latest prices:', error.message);
