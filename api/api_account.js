@@ -44,6 +44,8 @@ exports.account_info = get_account_info
 
 
 
+
+
 // Import the functions you need from the SDKs you need
 const { initializeApp } = require("firebase/app");
 const { getDatabase, ref, set } = require("firebase/database");
@@ -73,20 +75,39 @@ async function setValueToTodayFolder(myValues) {
 
     const myValues_for_firebase = await myValues;
 
-    // Get today's date in the "YYYY-MM-DD" format
+    // Save to "open_folder"
+    // today's date in datestring 'YYYY-MM-DD' format for folder naming
     const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-    const dd = String(today.getDate()).padStart(2, '0');
-    const todayDateString = `${yyyy}-${mm}-${dd}`;
+    const todayDateString = getTodayDateString(today)
+    const open_folder_name = 'open_folder'
+    const open_folder_path = open_folder_name + '/' + todayDateString
 
     // Reference to the Firebase folder with today's date
-    const folderRef = ref(database, todayDateString);
+    const folderRefOpen = ref(database, open_folder_path);
 
-    // Set the values in the folder
-    set(folderRef, myValues_for_firebase)
+    // Set the values in open_date folder for today's date
+    set(folderRefOpen, myValues_for_firebase)
       .then(() => {
-        console.log(`Values set in folder ${todayDateString}`);
+        console.log(`Values set in open_folder ${todayDateString}`);
+      })
+      .catch((error) => {
+        console.error(`Error setting values: ${error}`);
+      });
+
+
+    // target date 14 days in future in datestring 'YYYY-MM-DD' format for folder naming
+    const targetDate = calculateTargetDate();  // Calculate the target date 14 days in future
+    const targetDateString = getTodayDateString(targetDate)
+    const close_folder_name = 'close_folder'
+    const close_folder_path = close_folder_name + '/' + targetDateString
+
+    // Reference to the Firebase folder with today's date
+    const folderRefClose = ref(database, close_folder_path);
+
+    // Set the values in open_date folder for today's date
+    set(folderRefClose, myValues_for_firebase)
+      .then(() => {
+        console.log(`Values set in close_folder ${todayDateString}`);
       })
       .catch((error) => {
         console.error(`Error setting values: ${error}`);
@@ -98,16 +119,85 @@ async function setValueToTodayFolder(myValues) {
 
 }
 
-
-
-// // Example usage
-// const myValues = {
-//   key1: "value1",
-//   key2: "value2"
-// };
-
-// setValueToTodayFolder(myValues);
-
-
-
 exports.set_values_to_firebase = setValueToTodayFolder
+
+
+
+
+
+
+// find trading date 14 days in future --> for closing position
+
+// Define the array of holiday dates for 2023 (as provided earlier)
+const holidayDates2023 = [
+  new Date(2023, 0, 2),     // New Year's Day (observed)
+  new Date(2023, 0, 16),    // Martin Luther King Jr. Day
+  new Date(2023, 1, 20),    // Presidents' Day
+  new Date(2023, 3, 7),     // Good Friday
+  new Date(2023, 4, 29),    // Memorial Day
+  new Date(2023, 5, 19),    // Juneteenth
+  new Date(2023, 6, 4),     // Independence Day (observed)
+  new Date(2023, 8, 4),     // Labor Day
+  new Date(2023, 10, 23),   // Thanksgiving Day
+  new Date(2023, 11, 25)    // Christmas Day
+];
+
+// Function to add 14 days to today's date and adjust if necessary
+function calculateTargetDate() {
+  // Get today's date
+  const today = new Date();
+
+  // Add 14 days to today's date
+  const targetDate = new Date(today);
+  targetDate.setDate(targetDate.getDate() + 14);
+
+  // Check if the target date falls on a weekend or holiday
+  while (targetDate.getDay() === 0 || targetDate.getDay() === 6 || isHoliday(targetDate)) {
+      targetDate.setDate(targetDate.getDate() - 1); // Adjust to the previous weekday
+  }
+
+  return targetDate;
+}
+
+// Function to check if a given date is a holiday
+function isHoliday(date) {
+  return holidayDates2023.some(holiday => {
+      return date.toDateString() === holiday.toDateString();
+  });
+}
+
+// // Calculate the target date
+// const targetDate = calculateTargetDate();
+
+// // Output the result
+// console.log("Target Date:", targetDate.toDateString());
+
+
+// function which converts date object (const today = new Date();) into date string in "YYYY-MM-DD" format for firebase folder naming.
+function getTodayDateString(date_to_convert) {
+
+      // Get today's date in the "YYYY-MM-DD" format
+      const yyyy = date_to_convert.getFullYear();
+      const mm = String(date_to_convert.getMonth() + 1).padStart(2, '0'); // January is 0!
+      const dd = String(date_to_convert.getDate()).padStart(2, '0');
+      const DateString = `${yyyy}-${mm}-${dd}`;
+
+      return DateString
+
+}
+
+const date_to_convert = new Date(2023, 8, 23)
+close_date_folder_name = 'close_date' + "/" + getTodayDateString(targetDate)
+myvaluesstring = 'abcd'
+
+// Reference to the Firebase folder with today's date
+const folderRef = ref(database, close_date_folder_name);
+
+// Set the values in the folder
+set(folderRef, myvaluesstring)
+  .then(() => {
+    console.log(`Values set in folder ${close_date_folder_name}`);
+  })
+  .catch((error) => {
+    console.error(`Error setting values: ${error}`);
+  });
