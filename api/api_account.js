@@ -186,18 +186,18 @@ function getTodayDateString(date_to_convert) {
 
 }
 
-const date_to_convert = new Date(2023, 8, 23)
-close_date_folder_name = 'close_date' + "/" + getTodayDateString(targetDate)
-myvaluesstring = 'abcd'
+// const date_to_convert = new Date(2023, 8, 23)
+// close_date_folder_name = 'close_date' + "/" + getTodayDateString(targetDate)
+// myvaluesstring = 'abcd'
 
-// Reference to the Firebase folder with today's date
-const folderRef = ref(database, close_date_folder_name);
+// // Reference to the Firebase folder with today's date
+// const folderRef = ref(database, close_date_folder_name);
 
-// Set the values in the folder
-set(folderRef, myvaluesstring)
-  .then(() => {
-    console.log(`Values set in folder ${close_date_folder_name}`);
-  })
-  .catch((error) => {
-    console.error(`Error setting values: ${error}`);
-  });
+// // Set the values in the folder
+// set(folderRef, myvaluesstring)
+//   .then(() => {
+//     console.log(`Values set in folder ${close_date_folder_name}`);
+//   })
+//   .catch((error) => {
+//     console.error(`Error setting values: ${error}`);
+//   });
