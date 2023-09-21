@@ -119,7 +119,10 @@ async function get_latest_prices() {
 
         console.log(ticker_quantities)
 
-        ticker_quantities['timestamp'] = new Date();
+        // add timestamp for help with logging errors
+        timestamp_object = new Date()
+        timestamp_dateString = timestamp_object.toString()
+        ticker_quantities['timestamp'] = timestamp_dateString;
 
         // add tickers object to firebase folder. need to await the upload otherwise the html will be sent via api prior to upload to firebase completing.
         const ticker_quantities_uploaded = await account_module_functions.set_values_to_firebase(ticker_quantities)
