@@ -119,10 +119,7 @@ async function get_latest_prices() {
 
         console.log(ticker_quantities)
 
-        // // turn tickers object to tickers string
-        // const keys = Object.keys(ticker_quantities);  // Use Object.keys() to get an array of the object's keys
-        // const keyValueStrings = keys.map(key => `${key}: ${ticker_quantities[key]}`);  // Use map() to create an array of strings in the format "key: value"
-        // const resultString = keyValueStrings.join(', ');  // Use join() to concatenate the array elements into a single string
+        ticker_quantities['timestamp'] = new Date();
 
         // add tickers object to firebase folder. need to await the upload otherwise the html will be sent via api prior to upload to firebase completing.
         const ticker_quantities_uploaded = await account_module_functions.set_values_to_firebase(ticker_quantities)
