@@ -21,15 +21,9 @@ app.get('/', async (req, res) => {
         const scrape_calc_buy_response = await scrape_calc_buy();
         
         // turn object to string
-        // Use Object.keys() to get an array of the object's keys
-        const keys = Object.keys(scrape_calc_buy_response);
-
-        // Use map() to create an array of strings in the format "key: value"
-        const keyValueStrings = keys.map(key => `${key}: ${scrape_calc_buy_response[key]}`);
-
-        // Use join() to concatenate the array elements into a single string
-        const resultString = keyValueStrings.join(', ');
-
+        const keys = Object.keys(scrape_calc_buy_response);  // Use Object.keys() to get an array of the object's keys
+        const keyValueStrings = keys.map(key => `${key}: ${scrape_calc_buy_response[key]}`);  // Use map() to create an array of strings in the format "key: value"
+        const resultString = keyValueStrings.join(', ');  // Use join() to concatenate the array elements into a single string
 
         // Render the HTML with the node.js data
         const renderedHtml = `

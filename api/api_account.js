@@ -82,43 +82,20 @@ async function setValueToTodayFolder(myValues) {
     const open_folder_name = 'open_folder'
     const open_folder_path = open_folder_name + '/' + todayDateString
 
-    // Reference to the Firebase folder with today's date
-    const folderRefOpen = ref(database, open_folder_path);
-
     // target date 14 days in future in datestring 'YYYY-MM-DD' format for folder naming
     const targetDate = calculateTargetDate();  // Calculate the target date 14 days in future
     const targetDateString = getTodayDateString(targetDate)
     const close_folder_name = 'close_folder'
     const close_folder_path = close_folder_name + '/' + targetDateString
 
-    // Reference to the Firebase folder with today's date
-    const folderRefClose = ref(database, close_folder_path);
+    // // References to the Firebase folder with today's and target dates
+    // const folderRefOpen = ref(database, open_folder_path);
+    // const folderRefClose = ref(database, close_folder_path);
 
+    await setToFirebase(open_folder_path, todayDateString, myValues)
+    await setToFirebase(close_folder_path, targetDateString, myValues)
 
-    // Set the values in open_date folder for today's date
-    set(folderRefOpen, myValues_for_firebase)
-    .then(() => {
-      console.log(`Values set in open_folder ${todayDateString}`);
-
-      // Set the values in open_date folder for today's date
-      set(folderRefClose, myValues_for_firebase)
-      .then(() => {
-        console.log(`Values set in close_folder ${todayDateString}`);
-
-        // need to return values to ensure the upload to firebase function completes before sending html via api.
-        return myValues_for_firebase
-
-      })
-      .catch((error) => {
-        console.error(`Error setting values: ${error}`);
-      });
-
-    })
-    .catch((error) => {
-      console.error(`Error setting values: ${error}`);
-    });
-
-
+    return myValues
 
   } catch (error) {
     throw error;
@@ -129,7 +106,23 @@ async function setValueToTodayFolder(myValues) {
 exports.set_values_to_firebase = setValueToTodayFolder
 
 
+// set values to firebase
+async function setToFirebase(folder_path, folder_date_name, values_) {
 
+  // Reference to the Firebase folder with today's date
+  const folderRef = ref(database, folder_path);
+
+  // Set the values in open_date folder for today's date
+  set(folderRef, values_)
+  .then(() => {
+    console.log(`Values set in close_folder ${folder_date_name}`);
+
+  })
+  .catch((error) => {
+    console.error(`Error setting values: ${error}`);
+  });
+
+}
 
 
 

@@ -127,6 +127,7 @@ async function get_latest_prices() {
         // add tickers object to firebase folder. need to await the upload otherwise the html will be sent via api prior to upload to firebase completing.
         const ticker_quantities_uploaded = await account_module_functions.set_values_to_firebase(ticker_quantities)
 
+        console.log('ticker_quantities_uploaded = ' + ticker_quantities_uploaded)
         return ticker_quantities_uploaded
 
     } catch (error) {
