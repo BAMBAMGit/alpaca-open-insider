@@ -112,6 +112,8 @@ async function setToFirebase(folder_path, folder_date_name, values_) {
   // Reference to the Firebase folder with today's date
   const folderRef = ref(database, folder_path);
 
+  values_['timestamp'] = new Date();
+
   // Set the values in open_date folder for today's date
   set(folderRef, values_)
   .then(() => {
