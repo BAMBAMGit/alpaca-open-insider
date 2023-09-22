@@ -124,27 +124,28 @@ async function check_firebase_and_close_queue() {
 
 }
 
+exports.check_firebase_and_close_queue = check_firebase_and_close_queue;
 
 // ------------------------------------------------------------------------------------------------
-// Set API endpoint
+// // Set API endpoint
 
-const express = require('express');
-const router = express.Router();
 
-// Define your API endpoint
-router.get('/check_firebase_and_close_queue', async (req, res) => {
-    try {
-      // Call your function
-      const result = await check_firebase_and_close_queue();
+// const express = require('express');
+// const router = express.Router();
+
+// // Define your API endpoint
+// router.get('/check_firebase_and_close_queue', async (req, res) => {
+//     try {
+//       // Call your function
+//       const result = await check_firebase_and_close_queue();
   
-      // Send the result as JSON response
-      res.json({ result });
+//       // Send the result as JSON response
+//       res.json({ result });
 
-    } catch (error) {
-      // Handle errors
-      console.error(error);
-      res.status(500).json({ error: 'An error occurred' });
-    }
-});
+//     } catch (error) {
+//       // Handle errors
+//       console.error(error);
+//       res.status(500).json({ error: 'An error occurred' });
+//     }
+// });
 
-exports.check_firebase_and_close_queue = check_firebase_and_close_queue;
