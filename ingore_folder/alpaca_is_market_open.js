@@ -1,7 +1,7 @@
 // node doc returns true/false if market is open
 
 const fetch = require('node-fetch');
-const { apiKey, apiSecret, headers } = require('./alpaca_cred');
+const { apiKey, apiSecret, headers } = require('../api/alpaca_cred');
 
 // Alpaca API base URL
 const baseURL = 'https://paper-api.alpaca.markets'; // Use 'https://api.alpaca.markets' for the live market

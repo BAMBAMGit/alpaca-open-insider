@@ -1,21 +1,5 @@
-const isMarketOpen = require('./alpaca_is_market_open.js');
 const scrape_module = require('./api_scrape.js');
-const positions_module = require('./api_portfolio.js');
-const account_module_functions = require('./api_account.js');
-const yesterday_price_module = require('./api_latest_price.js');
-const place_order = require('./alpaca_place_order.js');
-
-// check if the market is open
-async function marketstatus() {
-    try {
-      const result = await isMarketOpen();
-      console.log('is market open?:', result);
-      return result
-
-    } catch (error) {
-      console.error('Error in checking if market is open:', error.message);
-    }
-}
+const alpaca_functions = require('./api_account.js');
 
 
 // get scraped tickers
@@ -33,7 +17,7 @@ async function get_scraped_tickers() {
 // get held positions
 async function get_positions() {
     try {
-      const result = await positions_module();
+      const result = await alpaca_functions.get_positions();
       console.log('positions:', result);
     } catch (error) {
       console.error('Error in checking positions:', error.message);
@@ -44,7 +28,7 @@ async function get_positions() {
 // get account value
 async function get_account_value() {
     try {
-      const result = await account_module_functions.account_info();
+      const result = await alpaca_functions.account_info();
       return result.portfolio_value
     } catch (error) {
       console.error('Error in checking account value:', error.message);
@@ -55,7 +39,7 @@ async function get_account_value() {
 // get account value
 async function get_cash_account_value() {
     try {
-      const result = await account_module_functions.account_info();
+      const result = await alpaca_functions.account_info();
       return result.cash
     } catch (error) {
       console.error('Error in checking account value:', error.message);
@@ -64,7 +48,7 @@ async function get_cash_account_value() {
 
 
 // scrape tickers from open insider, calculate the purchase amounts, and sumbit buy orders
-async function get_latest_prices() {
+async function scrape_calc_buy() {
     try {
 
         const ticker_list = await get_scraped_tickers()
@@ -74,7 +58,7 @@ async function get_latest_prices() {
         for (const ticker of ticker_list) {
 
             try {
-              const ticker_bars = await yesterday_price_module(ticker);
+              const ticker_bars = await alpaca_functions.getHistoricalBars(ticker);
               const ticker_close = ticker_bars[ticker]['ClosePrice']
               buy_prices[ticker] = ticker_close
             }
@@ -111,7 +95,7 @@ async function get_latest_prices() {
 
           // place order
           if (cost_ < cash_value && quantity_ > 0) {
-            place_order(ticker, quantity_)
+            alpaca_functions.place_order(ticker, quantity_)
             console.log(ticker + ' Order Placed: ' + '   price = ' + price_ + '   cost = ' + cost_ + '   qty = ' + quantity_)
           }
           
@@ -125,7 +109,7 @@ async function get_latest_prices() {
         ticker_quantities['timestamp'] = timestamp_dateString;
 
         // add tickers object to firebase folder. need to await the upload otherwise the html will be sent via api prior to upload to firebase completing.
-        const ticker_quantities_uploaded = await account_module_functions.set_values_to_firebase(ticker_quantities)
+        const ticker_quantities_uploaded = await alpaca_functions.set_values_to_firebase(ticker_quantities)
 
         console.log('ticker_quantities_uploaded = ' + ticker_quantities_uploaded)
         return ticker_quantities_uploaded
@@ -135,7 +119,7 @@ async function get_latest_prices() {
     }
 }
 
-module.exports = get_latest_prices
+module.exports = scrape_calc_buy
 
 
 

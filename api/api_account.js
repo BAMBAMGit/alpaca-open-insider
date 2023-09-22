@@ -20,31 +20,106 @@ async function get_account_info() {
 
 }
 
-
-// // Define an API endpoint to get_account_info()
-// module.exports = function (app) {
-        
-//     app.get("/api/account", async (req, res) => {
-        
-//         try {
-//             const account = await get_account_info();
-//             res.send(account);
-
-//         } catch (error) {
-//             console.error("Error fetching account:", error.message);
-//             res.status(500).send("Internal server error");
-//         }
-//     });
-
-// };
-
-
 exports.account_info = get_account_info
 
 
+// ------------------------------------------------------------------------------------------------
+
+
+// Get a list of all of our positions and return in JSON format
+async function get_positions() {
+  try {
+      const portfolio = await alpaca.getPositions();
+      return portfolio;
+
+  } catch (error) {
+      throw error;
+  }
+}
+
+exports.get_positions = get_positions
+
+
+// ------------------------------------------------------------------------------------------------
+
+
+// Function to check if the market is open
+async function isMarketOpen() {
+  
+  // Alpaca API base URL
+  const baseURL = 'https://paper-api.alpaca.markets'; // Use 'https://api.alpaca.markets' for the live market
+  
+  try {
+    const response = await fetch(`${baseURL}/v2/clock`, {
+      method: 'GET',
+      headers: {
+        'APCA-API-KEY-ID': apiKey,
+        'APCA-API-SECRET-KEY': apiSecret,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const marketStatus = await response.json();
+    return marketStatus.is_open
+
+  } catch (error) {
+    console.error('Error checking market status:', error.message);
+  }
+}
+
+exports.isMarketOpen = isMarketOpen
+
+
+// ------------------------------------------------------------------------------------------------
+
+// Getting latest bars --> this helps calculate how many shares of each stock to buy
+
+const options = {
+  start: new Date(new Date().setDate(new Date().getDate() - 7)), // 1 day ago
+  end: new Date(new Date().setDate(new Date().getDate() - 1)), // Current date
+  timeframe: "1Day",
+};
+
+
+async function getHistoricalBars(ticker) {
+  
+  const resp = alpaca.getBarsV2(ticker, options);
+  
+  var package_ = {}
+  for await (let bar of resp) {
+    package_[ticker] = bar
+  }
+
+  return package_
+}
+
+exports.getHistoricalBars = getHistoricalBars
 
 
 
+// ------------------------------------------------------------------------------------------------
+
+
+function place_order (ticker, quantity_) {
+
+  // Submit a market order to buy 1 share of Apple at market price
+  alpaca.createOrder({
+  symbol: ticker,
+  qty: quantity_,
+  side: "buy",
+  type: "market",
+  time_in_force: "day",
+  });
+
+}
+
+exports.place_order = place_order
+
+
+// ------------------------------------------------------------------------------------------------
 
 // Import the functions you need from the SDKs you need
 const { initializeApp } = require("firebase/app");
@@ -103,8 +178,6 @@ async function setValueToTodayFolder(myValues) {
 
 }
 
-exports.set_values_to_firebase = setValueToTodayFolder
-
 
 // set values to firebase
 async function setToFirebase(folder_path, folder_date_name, values_) {
@@ -123,7 +196,6 @@ async function setToFirebase(folder_path, folder_date_name, values_) {
   });
 
 }
-
 
 
 // find trading date 14 days in future --> for closing position
@@ -166,13 +238,6 @@ function isHoliday(date) {
   });
 }
 
-// // Calculate the target date
-// const targetDate = calculateTargetDate();
-
-// // Output the result
-// console.log("Target Date:", targetDate.toDateString());
-
-
 // function which converts date object (const today = new Date();) into date string in "YYYY-MM-DD" format for firebase folder naming.
 function getTodayDateString(date_to_convert) {
 
@@ -186,18 +251,8 @@ function getTodayDateString(date_to_convert) {
 
 }
 
-// const date_to_convert = new Date(2023, 8, 23)
-// close_date_folder_name = 'close_date' + "/" + getTodayDateString(targetDate)
-// myvaluesstring = 'abcd'
+exports.set_values_to_firebase = setValueToTodayFolder
 
-// // Reference to the Firebase folder with today's date
-// const folderRef = ref(database, close_date_folder_name);
 
-// // Set the values in the folder
-// set(folderRef, myvaluesstring)
-//   .then(() => {
-//     console.log(`Values set in folder ${close_date_folder_name}`);
-//   })
-//   .catch((error) => {
-//     console.error(`Error setting values: ${error}`);
-//   });
+// ------------------------------------------------------------------------------------------------
+

@@ -4,8 +4,8 @@ const path = require('path');
 const express = require('express');
 const app = express();
 
-const scrape_calc_buy = require("./test.js");
-const isMarketOpen = require('./alpaca_is_market_open.js');
+const scrape_calc_buy = require("./scrape_calc_buy.js");
+const alpaca_functions = require('./api_account.js');
 
 
 // making an api for '/' that responds with dynamic html
@@ -13,7 +13,7 @@ app.get('/', async (req, res) => {
     
     // check to see if market is open
     try {
-      const is_market_open_response = await isMarketOpen();
+      const is_market_open_response = await alpaca_functions.isMarketOpen();
       console.log('is market open?:', is_market_open_response);
 
       // if market open then scrape, calculate, send buy orders, and serve html with ticker/ticker_quantity via API.
