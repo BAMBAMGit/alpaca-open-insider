@@ -8,6 +8,9 @@ const alpaca = new Alpaca({
 });
 
 
+// ------------------------------------------------------------------------------------------------
+
+
 async function get_account_info() { 
 
     try {
@@ -103,7 +106,7 @@ exports.getHistoricalBars = getHistoricalBars
 // ------------------------------------------------------------------------------------------------
 
 
-function place_order (ticker, quantity_) {
+async function place_buy_order (ticker, quantity_) {
 
   // Submit a market order to buy 1 share of Apple at market price
   alpaca.createOrder({
@@ -116,7 +119,7 @@ function place_order (ticker, quantity_) {
 
 }
 
-exports.place_order = place_order
+exports.place_buy_order = place_buy_order
 
 
 // ------------------------------------------------------------------------------------------------

@@ -95,7 +95,7 @@ async function scrape_calc_buy() {
 
           // place order
           if (cost_ < cash_value && quantity_ > 0) {
-            alpaca_functions.place_order(ticker, quantity_)
+            await alpaca_functions.place_buy_order(ticker, quantity_)
             console.log(ticker + ' Order Placed: ' + '   price = ' + price_ + '   cost = ' + cost_ + '   qty = ' + quantity_)
           }
           
