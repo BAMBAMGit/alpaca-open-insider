@@ -63,11 +63,26 @@ app.get('/', async (req, res) => {
 
 
 // Reference the API endpoint code
-const check_firebase_and_close_queue = require('./api_sell_order.js');
+const close_functions = require('./api_sell_order.js');
 
 // Use the API router
-app.use('/api', check_firebase_and_close_queue); // Mount the API router under the '/api' path
-// http://localhost:3000/api/check_firebase_and_close_queue
+app.use('/check_firebase_and_close_queue', async (req, res) => {
+  try {
+
+    // Call your function
+    const result = await close_functions.check_firebase_and_close_queue();
+
+    // Send the result as JSON response
+    res.json({ result });
+
+  } catch (error) {
+    console.error('Error in running the API to check firebase and sell accordingly:', error.message);
+  }
+
+});
+
+// Mount the API router under the '/api' path
+// http://localhost:3000/check_firebase_and_close_queue
 
 // ------------------------------------------------------------------------------------------------
 

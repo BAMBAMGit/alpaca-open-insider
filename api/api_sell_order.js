@@ -105,7 +105,7 @@ async function check_firebase_and_close_queue() {
 
         // place sell order for each ticker from firebase data
         for (const ticker in data) {
-            if (ticker !== 'timestamp') {
+            if (ticker !== 'timestamp') {  //&& ticker !=='GLSI' && ticker != 'HPK' && ticker != 'IHT'
 
                 quantity_ = data[ticker]
                 await place_sell_order (ticker, quantity_)
@@ -119,7 +119,7 @@ async function check_firebase_and_close_queue() {
 
     } catch (error) {
         console.error(error);
-        throw error; // Rethrow the error for error handling at a higher level
+        // throw error; // Rethrow the error for error handling at a higher level
     }
 
 }
@@ -147,4 +147,4 @@ router.get('/check_firebase_and_close_queue', async (req, res) => {
     }
 });
 
-module.exports = router;
+exports.check_firebase_and_close_queue = check_firebase_and_close_queue;
