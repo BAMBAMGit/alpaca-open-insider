@@ -9,7 +9,6 @@ const alpaca = new Alpaca({
 
 function place_order (ticker, quantity_) {
 
-    return
     // Submit a market order to buy 1 share of Apple at market price
     alpaca.createOrder({
     symbol: ticker,
