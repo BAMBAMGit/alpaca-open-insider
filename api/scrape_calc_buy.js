@@ -112,7 +112,7 @@ async function scrape_calc_buy() {
         const ticker_quantities_uploaded = await alpaca_functions.set_values_to_firebase(ticker_quantities)
 
         // get tickers from firebase folder to confirm upload completed.
-        
+
 
         console.log('ticker_quantities_uploaded = ' + ticker_quantities_uploaded)
         return ticker_quantities_uploaded
@@ -123,8 +123,6 @@ async function scrape_calc_buy() {
 }
 
 module.exports = scrape_calc_buy
-
-
 
 // // Define an API endpoint to get_alpaca_positions()
 // module.exports = function (app) {

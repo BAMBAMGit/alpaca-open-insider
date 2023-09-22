@@ -147,7 +147,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-async function setValueToTodayFolder(myValues) {
+async function set_values_to_firebase(myValues) {
 
   try {
 
@@ -254,7 +254,7 @@ function getTodayDateString(date_to_convert) {
 
 }
 
-exports.set_values_to_firebase = setValueToTodayFolder
+exports.set_values_to_firebase = set_values_to_firebase
 
 
 // ------------------------------------------------------------------------------------------------
