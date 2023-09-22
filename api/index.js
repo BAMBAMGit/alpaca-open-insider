@@ -58,6 +58,20 @@ app.get('/', async (req, res) => {
 });
 
 
+// ------------------------------------------------------------------------------------------------
+// Create check_firebase_and_close_queue API endpoint
+
+
+// Reference the API endpoint code
+const check_firebase_and_close_queue = require('./api_sell_order.js');
+
+// Use the API router
+app.use('/api', check_firebase_and_close_queue); // Mount the API router under the '/api' path
+// http://localhost:3000/api/check_firebase_and_close_queue
+
+// ------------------------------------------------------------------------------------------------
+
+
 // Start the Express server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
