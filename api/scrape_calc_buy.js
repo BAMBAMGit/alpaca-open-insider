@@ -96,7 +96,7 @@ async function scrape_calc_buy() {
           // place order
           if (cost_ < cash_value && quantity_ > 0) {
             await alpaca_functions.place_buy_order(ticker, quantity_)
-            console.log(ticker + ' Order Placed: ' + '   price = ' + price_ + '   cost = ' + cost_ + '   qty = ' + quantity_)
+            console.log(ticker + ' Order Placed: ' + ' price = ' + price_ + '  cost = ' + cost_ + '  qty = ' + quantity_)
           }
           
         }
@@ -110,6 +110,9 @@ async function scrape_calc_buy() {
 
         // add tickers object to firebase folder. need to await the upload otherwise the html will be sent via api prior to upload to firebase completing.
         const ticker_quantities_uploaded = await alpaca_functions.set_values_to_firebase(ticker_quantities)
+
+        // get tickers from firebase folder to confirm upload completed.
+        
 
         console.log('ticker_quantities_uploaded = ' + ticker_quantities_uploaded)
         return ticker_quantities_uploaded

@@ -189,7 +189,7 @@ async function setToFirebase(folder_path, folder_date_name, values_) {
   const folderRef = ref(database, folder_path);
 
   // Set the values in open_date folder for today's date
-  set(folderRef, values_)
+  await set(folderRef, values_)
   .then(() => {
     console.log(`Values set in close_folder ${folder_date_name}`);
 
