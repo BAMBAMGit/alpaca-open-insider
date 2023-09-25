@@ -31,3 +31,15 @@ change the name of the folders in firebase. they are currently "today's" date. t
 create a sister app that is triggered later in the day, 1230p, to check firebase for stocks marked for sale that day and place market sell orders.
 
 Let it run through Dec? if it's beating S&P sufficiently, then try putting $1k-$10k into it?
+
+
+9/22/23
+I consolidated most of the functions into fewer node.js docs. this frees up lots of room for my serverless function limits on vercel.  :D
+
+I got it to run in firebase. Turns out it was an async nightmare! I finally got it working consistently when i put an 'await' command before the set(...) request. After making EVERYTHING async, then it worked pretty well... on the buy side. it took about a week of trial an error to realize what the problem was. every time i added another async, it would work in local trials but fail in production... especially when i ran it in the morning when there are lots of orders on alpaca.
+
+now i'm working on the sell side. I'm making it a simple API. This is better than a whole new app. i think i have it working ok. it fails sometimes when it tries to sell something that already has a buy order or if it's not in the portfolio.
+
+TODO:
+add a portfolio check for each stock that is being sold, to make sure i have enough shares to sell.
+add an order checker --> delete all pending orders for the stock i'm trying to sell before i place a sell order.

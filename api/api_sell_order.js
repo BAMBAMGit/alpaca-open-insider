@@ -68,12 +68,12 @@ const db = getDatabase(app);
 async function get_close_data_from_firebase(formattedDateString) {
     try {
         // make promise
-        const result = await get(ref(db, `close_folder/${formattedDateString}`))
+        const result = await get(ref(db, `open_folder/${formattedDateString}`))
 
         if (result.exists()) {
             return result.val();
         } else {
-            console.log("No data available");
+            console.log("No data available in close_folder for date: " + formattedDateString);
         }
 
     } catch (error) {
@@ -81,6 +81,45 @@ async function get_close_data_from_firebase(formattedDateString) {
         throw error; // Rethrow the error for error handling at a higher level
     }
 }
+
+
+// ------------------------------------------------------------------------------------------------
+// check for a pending order under a ticker's name, if it exists, then cancel that order
+
+async function check_for_open_orders_and_cancel_pending(ticker) {
+
+    // Get the last 100 of our closed orders
+    const orders = await alpaca
+    .getOrders({
+    status: "open",
+    limit: 10000,
+    nested: true, // show nested multi-leg orders
+    })
+
+    for (const order of orders) {
+        if (ticker == order['symbol']) {
+            console.log('Open order exists for ' + ticker + ". Will need to cancel order to continue.")
+            
+            // get order ID
+            const orderId = order['id']
+
+            // cancel order
+            try {
+                await alpaca.cancelOrder(orderId)
+                console.log('Order canceled: ' + ticker)
+            } catch (error) {
+                console.error(error);
+                // throw error; // Rethrow the error for error handling at a higher level
+            }
+        }
+    }
+
+}
+
+// const mylist = ['AAPL', 'TSLA', 'META'];
+// for (const ticker of mylist) {
+//     check_orders_and_cancel_pending(ticker)
+// }
 
 
 // ------------------------------------------------------------------------------------------------
@@ -99,7 +138,7 @@ async function check_firebase_and_close_queue() {
     // Create the yyyy-mm-dd string
     var formattedDateString = year + '-' + month + '-' + day;
 
-    const data = await get_close_data_from_firebase('2023-10-06')
+    const data = await get_close_data_from_firebase(formattedDateString)
 
     try {
 
@@ -107,11 +146,31 @@ async function check_firebase_and_close_queue() {
         for (const ticker in data) {
             if (ticker !== 'timestamp') {  //&& ticker !=='GLSI' && ticker != 'HPK' && ticker != 'IHT'
 
+                // get quantity to sell from firebase data download
                 quantity_ = data[ticker]
-                await place_sell_order (ticker, quantity_)
 
-                console.log(quantity_ + ' ' + ticker + ' sold')
-                
+                // get positions from alpaca to compare with ticker to sell from firebase data
+                positions = await alpaca.getPositions()
+
+                // iterate through each position to see if ticker is in our alpaca positions
+                for (position of positions) {
+                    symb = position['symbol']
+                    qty_ = position['qty']
+
+                    // are there enough shares of given ticker in alpaca portfolio?
+                    if (ticker == symb && qty_ >= quantity_) {
+
+
+                        // make sure there are no open orders on the ticker. if so, cancel the open order before continuing.
+                        await check_for_open_orders_and_cancel_pending(ticker)
+
+                        // place the sell order
+                        await place_sell_order (ticker, quantity_)
+                        console.log(ticker + ' sold ' + quantity_ + ' shares. Remaining shares: ' + qty_ - quantity_)
+
+                    }
+                }
+
             }
         }
 
@@ -127,25 +186,3 @@ async function check_firebase_and_close_queue() {
 exports.check_firebase_and_close_queue = check_firebase_and_close_queue;
 
 // ------------------------------------------------------------------------------------------------
-// // Set API endpoint
-
-
-// const express = require('express');
-// const router = express.Router();
-
-// // Define your API endpoint
-// router.get('/check_firebase_and_close_queue', async (req, res) => {
-//     try {
-//       // Call your function
-//       const result = await check_firebase_and_close_queue();
-  
-//       // Send the result as JSON response
-//       res.json({ result });
-
-//     } catch (error) {
-//       // Handle errors
-//       console.error(error);
-//       res.status(500).json({ error: 'An error occurred' });
-//     }
-// });
-

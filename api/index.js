@@ -17,7 +17,7 @@ app.get('/', async (req, res) => {
       console.log('is market open?:', is_market_open_response);
 
       // if market open then scrape, calculate, send buy orders, and serve html with ticker/ticker_quantity via API.
-      if (is_market_open_response == false) {
+      if (is_market_open_response == true) {
         const scrape_calc_buy_response = await scrape_calc_buy();
         
         // turn object to string
@@ -66,7 +66,7 @@ app.get('/', async (req, res) => {
 const close_functions = require('./api_sell_order.js');
 
 // Use the API router
-app.use('/check_firebase_and_close_queue', async (req, res) => {
+app.get('/check_firebase_and_close_queue', async (req, res) => {
   try {
 
     // Call your function
@@ -81,7 +81,7 @@ app.use('/check_firebase_and_close_queue', async (req, res) => {
 
 });
 
-// Mount the API router under the '/api' path
+
 // http://localhost:3000/check_firebase_and_close_queue
 
 // ------------------------------------------------------------------------------------------------
