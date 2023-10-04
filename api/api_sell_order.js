@@ -68,7 +68,7 @@ const db = getDatabase(app);
 async function get_close_data_from_firebase(formattedDateString) {
     try {
         // make promise
-        const result = await get(ref(db, `open_folder/${formattedDateString}`))
+        const result = await get(ref(db, `close_folder/${formattedDateString}`))
 
         if (result.exists()) {
             return result.val();
